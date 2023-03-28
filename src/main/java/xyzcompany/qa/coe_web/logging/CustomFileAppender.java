@@ -1,4 +1,4 @@
-package xyzcompany.qa.coe_web.factory;
+package xyzcompany.qa.coe_web.logging;
 
 import java.io.File;
 
