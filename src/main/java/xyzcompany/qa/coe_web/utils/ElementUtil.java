@@ -69,7 +69,7 @@ public class ElementUtil {
 	}
 
 	public String doElementGetText(By locator) {
-		return getElement(locator).getText();
+		return getElement(locator).getText().replaceAll("\\s+"," ");
 	}
 
 	public boolean doElementIsDisplayed(By locator) {
@@ -98,7 +98,7 @@ public class ElementUtil {
 		List<String> eleTextList = new ArrayList<String>();// size=0
 		List<WebElement> eleList = getElements(locator);
 		for (WebElement e : eleList) {
-			String text = e.getText();
+			String text = e.getText().replaceAll("\\s+"," ");
 			eleTextList.add(text);
 		}
 		return eleTextList;
