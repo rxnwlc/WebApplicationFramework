@@ -106,5 +106,11 @@ public class JavaScriptUtil {
 		js.executeScript("arguments[0].style.border='3px solid red'", element);
 	}
 	
+	public WebElement shadowDomElement (String JSQuerySelector) {
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		WebElement element = (WebElement)js.executeScript("returndocument.querySelector(\""+ JSQuerySelector+"\")");
+		return element;
+	}
+	
 
 }

@@ -2,10 +2,13 @@ package xyzcompany.qa.coe_web.utils;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -53,6 +56,12 @@ public class ElementUtil {
 		element.clear();
 		element.sendKeys(value);
 	}
+	
+	public void doSendKeys(By locator, int value) {
+		WebElement element = getElement(locator);
+		element.clear();
+		element.sendKeys(Integer.toString(value));
+	}
 
 	public void doActionsSendKeys(By locator, String value) {
 		Actions act = new Actions(driver);
@@ -61,6 +70,12 @@ public class ElementUtil {
 
 	public void doClick(By locator) {
 		getElement(locator).click();
+	}
+	
+	public void doClearData(By locator) {
+		WebElement element = getElement(locator);
+		element.sendKeys(Keys.CONTROL+"a");
+		element.sendKeys(Keys.DELETE);
 	}
 
 	public void doActionsCick(By locator) {
@@ -98,7 +113,7 @@ public class ElementUtil {
 		List<String> eleTextList = new ArrayList<String>();// size=0
 		List<WebElement> eleList = getElements(locator);
 		for (WebElement e : eleList) {
-			String text = e.getText().replaceAll("\\s+"," ");
+			String text = e.getText().replaceAll("\\s+"," ").trim();
 			eleTextList.add(text);
 		}
 		return eleTextList;
@@ -339,6 +354,50 @@ public class ElementUtil {
 
 		wait.until(ExpectedConditions.alertIsPresent());
 
+	}
+	
+	public void getTwoWindowIDs() {
+		Set<String> handles = driver.getWindowHandles();
+		Iterator<String> it = handles.iterator();
+		String parentWindowId = it.next();
+		String childWindowId = it.next();
+		System.out.println("parent window id is: " +parentWindowId);
+		System.out.println("child window id is: " + childWindowId);
+		}
+	
+	public String getParentWindowID() {
+		Set<String> handles = driver.getWindowHandles();
+		Iterator<String> it = handles.iterator();
+		String parentWindowId = it.next();
+		return parentWindowId;
+	}
+	
+	public String getChildWindowID() {
+		Set<String> handles = driver.getWindowHandles();
+		Iterator<String> it = handles.iterator();
+		it.next();
+		String childWindowId = it.next();
+		return childWindowId;
+	}
+	
+	public void switchToChildWindowID() {
+		driver.switchTo().window(getChildWindowID());
+	}
+	
+	
+	public void switchToParentWindowID() {
+		driver.switchTo().window(getParentWindowID());
+	}
+
+	public void doEnterBySendKeys(By locator) {
+		WebElement element = getElement(locator);
+		element.sendKeys(Keys.ENTER);
+	}
+	
+	public void doTabBySendKeys(By locator) {
+		WebElement element = getElement(locator);
+		element.sendKeys(Keys.TAB);
+		
 	}
 
 }
