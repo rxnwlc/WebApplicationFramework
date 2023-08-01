@@ -2,8 +2,10 @@ package xyzcompany.qa.coe_web.utils;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.openqa.selenium.Alert;
@@ -84,12 +86,14 @@ public class ElementUtil {
 	}
 
 	public String doElementGetText(By locator) {
-		return getElement(locator).getText().replaceAll("\\s+"," ");
+		return getElement(locator).getText().replaceAll("\\s+"," ").trim();
 	}
 
 	public boolean doElementIsDisplayed(By locator) {
 		return getElement(locator).isDisplayed();
 	}
+	
+	
 
 	public String getElementAttribute(By locator, String attrName) {
 		return getElement(locator).getAttribute(attrName);
@@ -114,10 +118,14 @@ public class ElementUtil {
 		List<WebElement> eleList = getElements(locator);
 		for (WebElement e : eleList) {
 			String text = e.getText().replaceAll("\\s+"," ").trim();
-			eleTextList.add(text);
-		}
+				if(text.length()>0) {
+					eleTextList.add(text);
+				}
+			}
 		return eleTextList;
 	}
+	
+	
 
 	// *************************Select based drop down utils****************//
 
@@ -237,6 +245,20 @@ public class ElementUtil {
 	public List<WebElement> waitForElementsPresence(By locator, int timeOut) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
 		return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+	}
+	//**********************************************************************************************************
+	public List<String> waitForElementsPresenceAndGetText(By locator, int timeOut) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+		wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+		List<String> eleTextList = new ArrayList<String>();// size=0
+		List<WebElement> eleList = getElements(locator);
+		for (WebElement e : eleList) {
+			String text = e.getText().replaceAll("\\s+"," ").trim();
+				if(text.length()>0) {
+					eleTextList.add(text);
+				}
+			}
+		return eleTextList;
 	}
 
 	/**
@@ -397,7 +419,53 @@ public class ElementUtil {
 	public void doTabBySendKeys(By locator) {
 		WebElement element = getElement(locator);
 		element.sendKeys(Keys.TAB);
-		
 	}
+	
+	public void mouseHover(By locator) {
+		WebElement element = getElement(locator);
+		Actions act = new Actions(driver);
+		act.moveToElement(element).build().perform();
+	}
+	
+	public void mouseClick(By locator) {
+		WebElement element = getElement(locator);
+		Actions act = new Actions(driver);
+		//act.moveToElement(element).build().perform();
+		act.click(element).build().perform();
+	}
+	
+	public Map<String, String> createHashMap(By locator, String delineator) {
+		Map<String, String> hashMap = new HashMap<String, String>();
+		List<WebElement> eleList = getElements(locator);
+		for(WebElement e : eleList) {
+			String data = e.getText();
+			String dataInfo[] = data.split(delineator);
+			String key = dataInfo[0].trim();
+			String value = dataInfo[1].trim();
+			hashMap.put(key, value);
+		}
+		return hashMap;
+	}
+	
+	public Map<String, String> createHashMapWithCustomKey(By locator, String delineator, String customKey) {
+		Map<String, String> hashMap = new HashMap<String, String>();
+		List<WebElement> eleList = getElements(locator);
+		for(WebElement e : eleList) {
+			String data = e.getText();
+			String dataInfo[] = data.split(delineator);
+			String value = dataInfo[1].trim();
+			hashMap.put(customKey, value);
+		}
+		return hashMap;
+	}
+	
+		
+		
+		
+	
+
+	
+
+	
 
 }
