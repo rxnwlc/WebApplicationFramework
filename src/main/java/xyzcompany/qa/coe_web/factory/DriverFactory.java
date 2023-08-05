@@ -94,6 +94,7 @@ public class DriverFactory {
 		getDriver().manage().deleteAllCookies();
 		getDriver().manage().window().maximize();
 		getDriver().get(prop.getProperty("url").trim());
+		getDriver().navigate().refresh();
 		return getDriver();
 
 	}
